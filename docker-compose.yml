@@ -1,0 +1,28 @@
+networks:
+  dev:
+    name: dev
+
+services: 
+  db:
+    container_name: db
+    profiles: [dev]
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: oitavarosado
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - dev
+
+  mvc:
+    container_name: mvc
+    profiles: [dev]
+    build: reservasalas/.
+    depends_on:
+      - db
+    ports:
+      - "8081:8080"
+    networks:
+      - dev
