@@ -1,6 +1,7 @@
 package com.dunnas.reservasalas.mappers;
 
 import com.dunnas.reservasalas.dto.CreateUserDto;
+import com.dunnas.reservasalas.dto.UpdateUserDto;
 import com.dunnas.reservasalas.dto.UserDto;
 import com.dunnas.reservasalas.model.Role;
 import com.dunnas.reservasalas.model.User;
@@ -20,6 +21,22 @@ public class UserMapper {
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
 
+        return user;
+    }
+
+    public UpdateUserDto userToUpdateUserDto(User user) {
+        UpdateUserDto updateUserDto = new UpdateUserDto();
+        updateUserDto.setId(user.getId());
+        updateUserDto.setUsername(user.getUsername());
+
+        return updateUserDto;
+    }
+
+    public User updateUserDtoToUser(UpdateUserDto userDto){
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setUsername(userDto.getUsername());
+        user.setPassword(userDto.getPassword());
         return user;
     }
 }

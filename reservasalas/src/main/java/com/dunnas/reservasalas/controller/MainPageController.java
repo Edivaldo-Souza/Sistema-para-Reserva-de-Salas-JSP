@@ -1,7 +1,9 @@
 package com.dunnas.reservasalas.controller;
 
+import com.dunnas.reservasalas.dto.SectorDto;
 import com.dunnas.reservasalas.dto.UserDto;
 import com.dunnas.reservasalas.enums.UserRole;
+import com.dunnas.reservasalas.mappers.SectorMapper;
 import com.dunnas.reservasalas.model.Role;
 import com.dunnas.reservasalas.model.Room;
 import com.dunnas.reservasalas.model.Sector;
@@ -21,10 +23,12 @@ public class MainPageController {
 
     private final UserService userService;
     private final SectorRepository sectorRepository;
+    private final SectorMapper sectorMapper;
 
-    public MainPageController(UserService userService, SectorRepository sectorRepository) {
+    public MainPageController(UserService userService, SectorRepository sectorRepository, SectorMapper sectorMapper) {
         this.userService = userService;
         this.sectorRepository = sectorRepository;
+        this.sectorMapper = sectorMapper;
     }
 
     @GetMapping("/home")
@@ -52,7 +56,8 @@ public class MainPageController {
         }
         else if(view.equals("sectors")){
             List<Sector> sectors = sectorRepository.findAll();
-            model.addAttribute("sectors", sectors);
+            List<SectorDto> sectorsDto = sectors.stream().map(sectorMapper::setorToSectorDto).toList();
+            model.addAttribute("sectors", sectorsDto);
         }
 
         model.addAttribute("currentView", view);

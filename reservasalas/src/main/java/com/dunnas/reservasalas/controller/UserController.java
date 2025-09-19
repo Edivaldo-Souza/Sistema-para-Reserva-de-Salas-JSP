@@ -1,6 +1,8 @@
 package com.dunnas.reservasalas.controller;
 
 import com.dunnas.reservasalas.dto.CreateUserDto;
+import com.dunnas.reservasalas.dto.UpdateUserDto;
+import com.dunnas.reservasalas.dto.UserDto;
 import com.dunnas.reservasalas.enums.UserRole;
 import com.dunnas.reservasalas.mappers.UserMapper;
 import com.dunnas.reservasalas.model.Role;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 @Controller
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -29,8 +32,8 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/user")
-    public String getUserPage(Model model,
+    @GetMapping("/create")
+    public String getCreateUserPage(Model model,
         @RequestHeader(value="Referer",required = false) String referer) {
 
         String backUrl;
@@ -49,23 +52,48 @@ public class UserController {
 
         model.addAttribute("backUrl",backUrl);
 
-        return "create-user";
+        return "user/create-user";
     }
 
-    @PostMapping("/user/create")
+    @GetMapping("/update/{id}")
+    public String getUpdateUserPage(@PathVariable("id") Long id, Model model){
+
+        User user = userService.getById(id);
+        if(user != null){
+            UpdateUserDto userDto = userMapper.userToUpdateUserDto(user);
+            model.addAttribute("user",userDto);
+        }
+
+        return "user/update-user";
+    }
+
+    @PostMapping("/save")
     public String createUser(
             @ModelAttribute CreateUserDto user,
-            @RequestParam("roles") String role,
+            @RequestParam(value = "roles", required = false) String role,
+            @RequestParam(value = "sectorId", required = false) Long sectorId,
             Authentication authentication,
             RedirectAttributes redirectAttributes
     ) {
-        try{
-            userService.createNewUser(userMapper.createUserDtoToUser(user), role, authentication);
+       userService.createNewUser(userMapper.createUserDtoToUser(user), role, sectorId, authentication);
 
-            redirectAttributes.addFlashAttribute("message", "Usuário criado com sucesso!");
-            return "redirect:/home?view=user";
-        } catch (Exception e){
-            return "redirect:/login";
-        }
+       redirectAttributes.addFlashAttribute("success", "Usuário criado com sucesso!");
+       return "redirect:/home?view=user";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute UpdateUserDto user, RedirectAttributes redirectAttributes) {
+
+        userService.update(userMapper.updateUserDtoToUser(user));
+
+        redirectAttributes.addFlashAttribute("success", "Usuário atualizado com sucesso!");
+        return "redirect:/home?view=user";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        userService.delete(id);
+
+        return "redirect:/home?view=user";
     }
 }

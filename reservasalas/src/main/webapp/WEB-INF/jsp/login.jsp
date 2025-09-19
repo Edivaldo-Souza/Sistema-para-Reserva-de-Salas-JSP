@@ -42,6 +42,7 @@
 
         <button type="submit" class="btn">Entrar</button>
     </form>
+    <a class="btn" href="<c:url value="/user/create" />">Fazer Cadastro</a>
 
 </div>
 

@@ -5,10 +5,13 @@ import com.dunnas.reservasalas.dto.SectorDto;
 import com.dunnas.reservasalas.mappers.SectorMapper;
 import com.dunnas.reservasalas.model.Sector;
 import com.dunnas.reservasalas.services.SectorService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/sector")
@@ -49,10 +52,21 @@ public class SectorController {
     @GetMapping("/update/{id}")
     public String getUpdateSectorPage(
             @PathVariable("id") Long id,
-            Model model
+            Model model,
+            @RequestHeader(value="Referer",required = false) String referer
     ){
+        String backUrl;
+
+        if(referer == null && !referer.equals("/sector")) {
+            backUrl = referer;
+        }
+        else{
+            backUrl = "/home";
+        }
+
         SectorDto sectorDto = sectorMapper.setorToSectorDto(sectorService.findById(id));
         model.addAttribute("sectorDto", sectorDto);
+        model.addAttribute("backUrl", backUrl);
 
         return "sector/create-sector";
     }
@@ -79,5 +93,16 @@ public class SectorController {
         sectorService.delete(id);
 
         return "redirect:/home?view=sectors";
+    }
+
+    @GetMapping("/entities")
+    private ResponseEntity<List<SectorDto>> getSectors(){
+        List<Sector> sectors = sectorService.findAll();
+
+        List<SectorDto> sectorDtos = sectors.stream().map(
+                sectorMapper::setorToSectorDto
+        ).toList();
+
+        return ResponseEntity.ok(sectorDtos);
     }
 }

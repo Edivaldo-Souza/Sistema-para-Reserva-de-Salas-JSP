@@ -24,16 +24,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers("/css/**","/WEB-INF/jsp/**","/js/**", "/images/**").permitAll()
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/rooms").hasRole("ADMINISTRADOR")
-                                .requestMatchers("/home").hasAnyRole(
-                                        UserRole.ADMINISTRADOR.name(),
-                                        UserRole.RECEPCIONISTA.name(),
-                                        UserRole.CLIENTE.name())
+                                .requestMatchers("/user/login","/user/create","/user/save").permitAll()
+                                .requestMatchers("/home").hasRole(
+                                        UserRole.ADMINISTRADOR.name())
                                 .anyRequest().authenticated())
                 .formLogin(
                         formLogin -> formLogin
-                        .loginPage("/login")
+                        .loginPage("/user/login")
                         .loginProcessingUrl("/exec_login")
                         .defaultSuccessUrl("/home",true)
                         .failureUrl("/login?error=true")

@@ -17,6 +17,9 @@ public class Sector {
 
     private Double cashAmount;
 
+    @OneToOne
+    private User user;
+
     @OneToMany(mappedBy = "sector", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Room> rooms;
 }

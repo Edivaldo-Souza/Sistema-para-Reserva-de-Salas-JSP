@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,13 +23,15 @@
 <body>
 
 <div class="container">
-    <h2>Criar Novo Usuário</h2>
+
+    <h2>Editar Usuário</h2>
 
     <%-- Mensagens de sucesso ou erro --%>
-    <c:if test="${not empty sucesso}"><div class="message success">${sucesso}</div></c:if>
+    <c:if test="${not empty success}"><div class="message success">${success}</div></c:if>
     <c:if test="${not empty erro}"><div class="message error">${erro}</div></c:if>
 
-    <form:form modelAttribute="user" action="/user/create" method="post">
+    <form:form modelAttribute="user" action="/user/update" method="post">
+        <form:hidden path="id"/>
         <div class="form-group">
             <form:label path="username">Nome de Usuário:</form:label>
             <form:input path="username" type="text" required="true" />
@@ -44,24 +47,8 @@
             <form:password path="confirmPassword" required="true" />
         </div>
 
-        <%-- ================================================================ --%>
-        <%-- LÓGICA CONDICIONAL: Este bloco só aparece para o usuário ADMIN --%>
-        <sec:authorize access="hasRole('ADMINISTRADOR')">
-            <div class="form-group">
-                <label>Papel do Usuário:</label>
-                    <%-- O 'name' aqui deve corresponder ao @RequestParam("roles") no controller --%>
-                <select name="roles" required>
-                    <option value="">Selecione um papel</option>
-                    <c:forEach items="${roles}" var="role">
-                        <option value="${role}">${role}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </sec:authorize>
-        <%-- ================================================================ --%>
-
         <div style="align-content: center">
-            <button type="submit" class="btn" style="margin-bottom: 15%">Cadastrar Usuário</button>
+            <button type="submit" class="btn" style="margin-bottom: 15%">Salvar Usuário</button>
             <a href="<c:url value="${backUrl}"/>" class="btn" >Voltar</a>
         </div>
     </form:form>

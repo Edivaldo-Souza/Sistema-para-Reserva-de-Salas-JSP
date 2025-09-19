@@ -67,7 +67,7 @@
         Listar Setores
     </a>
 
-    <a href="<c:url value='/user'/>"
+    <a href="<c:url value='/user/create'/>"
        class="btn">
         Criar Usuário
     </a>
@@ -89,24 +89,22 @@
         <h2>Lista de Usuários</h2>
         <c:choose>
             <c:when test="${not empty users}">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Papéis (Roles)</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${users}" var="user">
-                        <tr>
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
-                            <td>${user.role}</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <c:forEach items="${users}" var="user">
+                    <div class="sector-card">
+                        <div class="sector-header">
+                            <h2>${user.name}</h2>
+                            <h2>Papel: ${user.role}</h2>
+                            <a class=expand-btn href="<c:url value="/user/update/${user.id}"/>">
+                                Editar
+                            </a>
+                            <form action="<c:url value="/user/delete/${user.id}"/>" method="post"
+                                  style="display: inline"
+                                  onsubmit="return confirm('Tem certeza que quer deletar esse usuário?')">
+                                <button type="submit" class="expand-btn" style="background-color: red">Deletar</button>
+                            </form>
+                        </div>
+                    </div>
+                </c:forEach>
             </c:when>
             <c:otherwise>
                 <p>Nenhum usuário encontrado.</p>
@@ -122,21 +120,20 @@
                         <div class="sector-header">
                             <h2>${sector.name}</h2>
                             <h2>Caixa atual: R$ ${sector.cashAmount}</h2>
-                                <%-- O botão chama a função JS passando um ID único para o container de salas --%>
+                            <h2>Recepcionista: ${sector.username}</h2>
                             <button class="expand-btn" onclick="toggleSalas('room-from-sector-${sector.id}')">
                                 Ver Salas (${sector.rooms.size()})
                             </button>
                             <a class=expand-btn href="<c:url value="/sector/update/${sector.id}"/>">
-                                Editar Setor
+                                Editar
                             </a>
                             <form action="<c:url value="/sector/delete/${sector.id}"/>" method="post"
                              style="display: inline"
                              onsubmit="return confirm('Tem certeza que quer deletar esse setor?')">
                                 <button type="submit" class="expand-btn" style="background-color: red">Deletar</button>
-                            <form>
+                            </form>
                         </div>
 
-                            <%-- O container de salas, inicialmente escondido. ID ÚNICO É CRUCIAL. --%>
                         <div id="room-from-sector-${sector.id}" class="rooms-container">
                             <h4>Salas Associadas:</h4>
                             <c:forEach items="${sector.rooms}" var="room">

@@ -16,6 +16,11 @@ public class SectorMapper {
         SectorDto sectorDto = new SectorDto();
         sectorDto.setId(sector.getId());
         sectorDto.setName(sector.getName());
+        sectorDto.setCashAmount(sector.getCashAmount());
+
+        if(sector.getUser()!=null){
+            sectorDto.setUsername(sector.getUser().getUsername());
+        }
 
         List<RoomDto> rooms = new ArrayList<>();
         for (Room room : sector.getRooms()) {

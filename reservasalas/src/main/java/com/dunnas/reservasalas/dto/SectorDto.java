@@ -10,5 +10,6 @@ public class SectorDto {
     private Long id;
     private String name;
     private Double cashAmount;
+    private String username;
     private List<RoomDto> rooms = new ArrayList<>();
 }
