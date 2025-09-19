@@ -1,6 +1,7 @@
 package com.dunnas.reservasalas.config;
 
 import com.dunnas.reservasalas.enums.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private CustomAuthenticationHandler customAuthenticationHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -32,7 +36,7 @@ public class SecurityConfig {
                         formLogin -> formLogin
                         .loginPage("/user/login")
                         .loginProcessingUrl("/exec_login")
-                        .defaultSuccessUrl("/home",true)
+                        .successHandler(customAuthenticationHandler)
                         .failureUrl("/login?error=true")
                         .permitAll())
                 .logout(

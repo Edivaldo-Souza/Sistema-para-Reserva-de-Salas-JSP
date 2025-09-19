@@ -12,6 +12,12 @@ import java.util.List;
 @Component
 public class SectorMapper {
 
+    private final RequestMapper requestMapper;
+
+    public SectorMapper(RequestMapper requestMapper) {
+        this.requestMapper = requestMapper;
+    }
+
     public SectorDto setorToSectorDto(Sector sector) {
         SectorDto sectorDto = new SectorDto();
         sectorDto.setId(sector.getId());
@@ -29,6 +35,10 @@ public class SectorMapper {
             roomDto.setName(room.getName());
             roomDto.setCapacity(room.getCapacity());
             roomDto.setPrice(room.getPrice());
+            if(room.getRequests()!=null) {
+                roomDto.setRequests(room.getRequests().stream()
+                        .map(requestMapper::requestToRequestDto).toList());
+            }
             rooms.add(roomDto);
         }
 

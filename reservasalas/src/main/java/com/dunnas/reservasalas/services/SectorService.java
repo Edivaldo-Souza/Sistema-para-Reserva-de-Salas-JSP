@@ -1,6 +1,9 @@
 package com.dunnas.reservasalas.services;
 
+import com.dunnas.reservasalas.model.Request;
+import com.dunnas.reservasalas.model.Room;
 import com.dunnas.reservasalas.model.Sector;
+import com.dunnas.reservasalas.repository.RequestRepository;
 import com.dunnas.reservasalas.repository.SectorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import java.util.Optional;
 public class SectorService {
 
     private final SectorRepository sectorRepository;
+    private final RequestRepository requestRepository;
 
     @Transactional
     public void createSector(Sector sector) {
@@ -33,6 +37,34 @@ public class SectorService {
 
     public List<Sector> findAll() {
         return sectorRepository.findAll();
+    }
+
+    public List<Sector> findAllWithRequestFromUserId(Long userId) {
+        List<Sector> sectors = findAll();
+
+        for (Sector sector : sectors) {
+            if(sector.getRooms()!=null && !sector.getRooms().isEmpty()) {
+                for (Room room : sector.getRooms()) {
+                    room.setRequests(requestRepository.findAllByUserIdAndRoomId(userId, room.getId()));
+                }
+            }
+        }
+
+        return sectors;
+    }
+
+    public List<Sector> findAllWithUserId(Long userId) {
+        List<Sector> sectors = sectorRepository.findByUserId(userId);
+
+        for (Sector sector : sectors) {
+            if(sector.getRooms()!=null && !sector.getRooms().isEmpty()) {
+                for (Room room : sector.getRooms()) {
+                    room.setRequests(requestRepository.findAllByRoomId(room.getId()));
+                }
+            }
+        }
+
+        return sectors;
     }
 
     public Sector findById(Long id) {

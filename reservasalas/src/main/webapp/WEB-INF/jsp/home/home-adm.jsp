@@ -57,12 +57,12 @@
 <h1>Painel de Gerenciamento</h1>
 
 <div class="nav-buttons">
-    <a href="<c:url value='/home?view=users'/>"
+    <a href="<c:url value='/home/adm?view=users'/>"
        class="btn ${currentView == 'users' ? 'active' : ''}">
         Listar Usuários
     </a>
 
-    <a href="<c:url value='/home?view=sectors'/>"
+    <a href="<c:url value='/home/adm?view=sectors'/>"
        class="btn ${currentView == 'sectors' ? 'active' : ''}">
         Listar Setores
     </a>

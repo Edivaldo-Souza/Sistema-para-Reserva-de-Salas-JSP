@@ -78,7 +78,7 @@ public class UserController {
        userService.createNewUser(userMapper.createUserDtoToUser(user), role, sectorId, authentication);
 
        redirectAttributes.addFlashAttribute("success", "Usuário criado com sucesso!");
-       return "redirect:/home?view=user";
+       return "redirect:/home/home-adm?view=user";
     }
 
     @PostMapping("/update")
@@ -87,13 +87,13 @@ public class UserController {
         userService.update(userMapper.updateUserDtoToUser(user));
 
         redirectAttributes.addFlashAttribute("success", "Usuário atualizado com sucesso!");
-        return "redirect:/home?view=user";
+        return "redirect:/home/home-adm?view=user";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         userService.delete(id);
 
-        return "redirect:/home?view=user";
+        return "redirect:/home/home-adm?view=user";
     }
 }

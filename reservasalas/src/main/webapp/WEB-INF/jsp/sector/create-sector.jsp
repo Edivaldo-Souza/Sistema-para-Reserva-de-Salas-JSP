@@ -67,7 +67,7 @@
     let roomCounter = ${fn:length(sectorDto.rooms)}
 
     const addSalaBtn = document.getElementById('add-room-btn');
-    // Pega o container onde os blocos de sala serão inseridos
+
     const salasContainer = document.getElementById('rooms-container');
 
     addSalaBtn.addEventListener('click', function() {

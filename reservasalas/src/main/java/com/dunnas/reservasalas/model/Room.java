@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "tb_room")
@@ -20,4 +22,7 @@ public class Room {
 
     @ManyToOne
     private Sector sector;
+
+    @Transient
+    private List<Request> requests;
 }
