@@ -34,10 +34,6 @@ public class RequestController {
                 requestDto.getRoomId(),
                 authentication);
 
-        boolean forClient = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(role -> role.equals("ROLE_" + UserRole.CLIENTE));
-
         redirectAttributes.addFlashAttribute("success", "Solicitação de agendamento submetida");
 
         return "redirect:/home/client-receptionist";
