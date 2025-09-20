@@ -21,7 +21,7 @@ docker compose build
 ```
 docker compose up
 ```
-Obs: Caso o passo não 5 funcione, execute o passo 4 mais uma vez e tente novamento o passo 5
+Obs: Caso o passo não 5 funcione, execute o passo 4 mais uma vez e tente novamente o passo 5
 
 #### 5 - Inserir a seguinte url em um navegador 
 
